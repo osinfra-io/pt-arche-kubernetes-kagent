@@ -70,3 +70,19 @@ run "substrate_and_tags" {
     error_message = "kagent must read its PostgreSQL connection strings from the existing Secrets."
   }
 }
+
+run "fractional_worker_replicas_rejected" {
+  command = plan
+
+  module {
+    source = "./regional"
+  }
+
+  variables {
+    namespace            = "kagent"
+    substrate_namespace  = "ate-system"
+    worker_pool_replicas = 1.5
+  }
+
+  expect_failures = [var.worker_pool_replicas]
+}

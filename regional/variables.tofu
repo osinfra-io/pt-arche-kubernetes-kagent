@@ -65,7 +65,7 @@ variable "worker_pool_replicas" {
   default     = 1
 
   validation {
-    condition     = var.worker_pool_replicas > 0
-    error_message = "worker_pool_replicas must be greater than zero."
+    condition     = var.worker_pool_replicas > 0 && floor(var.worker_pool_replicas) == var.worker_pool_replicas
+    error_message = "worker_pool_replicas must be a whole number greater than zero."
   }
 }

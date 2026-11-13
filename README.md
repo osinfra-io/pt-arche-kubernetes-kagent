@@ -8,7 +8,7 @@ Reusable OpenTofu child module that installs kagent (`kagent-crds` and `kagent` 
 
 ## 🔩 Usage
 
-Deploy [`pt-arche-kubernetes-agent-substrate`](https://github.com/osinfra-io/pt-arche-kubernetes-agent-substrate) first and pass its namespace as `substrate_namespace`. Create the kagent namespace in the consuming root and pass its name explicitly.
+Deploy [`pt-arche-kubernetes-agent-substrate`](https://github.com/osinfra-io/pt-arche-kubernetes-agent-substrate) first and pass its namespace as `substrate_namespace`. Create the kagent namespace in the consuming root and pass its name explicitly, labelled `ate.dev/api-access=true`: Substrate's default-deny NetworkPolicies admit API clients only from namespaces with that label, and without it the controller cannot reach the API. The controller identity (`spiffe://cluster.local/ns/<namespace>/sa/kagent-controller`) must also be listed in the Agent Substrate module's `ingress_allowed_spiffe_ids`, otherwise the router denies all actor ingress. The module mounts the controller's Substrate client certificate (`controller.substrateClientCertificate`) so it can authenticate to the API.
 
 Like the authentik module, this module uses external PostgreSQL and existing Secrets: `postgres_owner_secret_name` and `postgres_read_write_secret_name` name Secrets whose `ownerConnectionString` and `readWriteConnectionString` keys hold the connection strings. The default model's API key Secret (`kagent-openai`) must also exist; this module creates none of them. The worker image tag follows `substrate_version`, so keep it aligned with the Agent Substrate release.
 
