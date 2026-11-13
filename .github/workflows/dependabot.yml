@@ -1,0 +1,16 @@
+name: Dependabot Approve and Merge
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+
+jobs:
+  dependabot:
+    name: Dependabot
+    if: github.actor == 'dependabot[bot]' && github.event.pull_request.user.login == 'dependabot[bot]' && github.event.pull_request.head.repo.full_name == github.repository
+    uses: osinfra-io/pt-techne-misc-workflows/.github/workflows/dependabot.yml@873e5eb069348e446ddc20c9c96661073d4bec42  # v0.3.5
+    secrets:
+      pr_approve_and_merge_pem: ${{ secrets.PR_APPROVE_AND_MERGE_PEM }}
